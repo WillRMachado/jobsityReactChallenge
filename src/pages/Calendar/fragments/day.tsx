@@ -1,19 +1,22 @@
 import React from "react";
 
-function day() {
+function day(props: { date: any; }) {
+  const { date } = props;
+  console.log("p", props.date.getDay());
   return (
     <div
       style={{
-        // backgroundColor: "green",
+        width: "100%",
+        minHeight: "1000",
+        backgroundColor: "green",
         // width: "9vw",
-        // paddingRight: 30,
-        // paddingLeft: 30,
-        // borderWidth: 1,
-        // borderStyle: "solid",
-        // borderColor: "red",
+        padding: 30,
+        borderWidth: 1,
+        borderStyle: "solid",
+        borderColor: "red",
       }}
     >
-      day
+      {date.getDate() + "/" + date.getMonth()}
     </div>
   );
 }

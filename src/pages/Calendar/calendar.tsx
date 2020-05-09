@@ -1,28 +1,41 @@
 /* eslint-disable no-fallthrough */
 import React from "react";
 
-import moment from "moment";
 
-import Day from "./fragments/day";
-import Week from "./fragments/weekColum";
-
-import { Container, Col, Row } from "react-bootstrap";
+// import moment from "moment";
+// import { Container, Col, Row } from "react-bootstrap";
 import WeekColumn from "./fragments/weekColum";
 
-function calendar() {
-  const monthWeekdayStart = 2;
-  const monthDays = 31;
-  const previousMonthDaysShowing = 2;
-  const nextMonthDaysShowing = 2;
-
-  const weekDays = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
+function Calendar() {
+  const calendar = [
+    {
+      dayTitle: "Sunday",
+      daysColumn: getDaysColumn(0),
+    },
+    {
+      dayTitle: "Monday",
+      daysColumn: getDaysColumn(1),
+    },
+    {
+      dayTitle: "Tuesday",
+      daysColumn: getDaysColumn(2),
+    },
+    {
+      dayTitle: "Wednesday",
+      daysColumn: getDaysColumn(3),
+    },
+    {
+      dayTitle: "Thursday",
+      daysColumn: getDaysColumn(4),
+    },
+    {
+      dayTitle: "Friday",
+      daysColumn: getDaysColumn(5),
+    },
+    {
+      dayTitle: "Saturday",
+      daysColumn: getDaysColumn(6),
+    },
   ];
 
   function getDaysColumn(dayNumber: any) {
@@ -30,14 +43,14 @@ function calendar() {
       month = d.getMonth(),
       weekDays = [];
 
-    d.setDate(dayNumber);
+    d.setDate(1);
 
     // Get the first week day in the month
     while (d.getDay() !== dayNumber) {
       d.setDate(d.getDate() + 1);
     }
 
-    //adding previous Month Days
+    // adding previous Month Days
     if (d.getDate() > dayNumber + 1) {
       let prevDay = new Date();
       prevDay.setDate(d.getDate() - 7);
@@ -51,34 +64,24 @@ function calendar() {
     }
 
     //adding next month dates
-    if (weekDays.length <= 4) {
+    if (weekDays.length <= 5) {
       weekDays.push(d);
     }
 
     return weekDays;
   }
 
-  const getDates = () => {
-    let sundays = getDaysColumn(0);
-    let mondays = getDaysColumn(1);
-    let tuesdays = getDaysColumn(2);
-    let wednesdays = getDaysColumn(3);
-    let thursdays = getDaysColumn(4);
-    let fridays = getDaysColumn(5);
-    let saturdays = getDaysColumn(6);
-    const w = getDaysColumn(6);
-    console.log("w", mondays);
-  };
-  getDates();
-
   return (
     <div>
       <table>
-        <thead />
         <tbody>
-          <tr>
-            {weekDays.map((day, i) => (
-              <WeekColumn key={i} dayTitle={day} />
+          <tr style={{ backgroundColor: "blue" }}>
+            {calendar.map((day, i) => (
+              <WeekColumn
+                key={i}
+                dayTitle={day.dayTitle}
+                daysColumn={day.daysColumn}
+              />
             ))}
           </tr>
         </tbody>
@@ -87,4 +90,4 @@ function calendar() {
   );
 }
 
-export default calendar;
+export default Calendar;
