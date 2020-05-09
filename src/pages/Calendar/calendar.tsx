@@ -1,12 +1,17 @@
 /* eslint-disable no-fallthrough */
-import React from "react";
-
+import React, { useState, useEffect } from "react";
 
 // import moment from "moment";
 // import { Container, Col, Row } from "react-bootstrap";
 import WeekColumn from "./fragments/weekColum";
 
 function Calendar() {
+  const [currentMonth, setCurrentMonth] = useState(0);
+
+  useEffect(() => {
+    getCurrentMonth();
+  }, []);
+
   const calendar = [
     {
       dayTitle: "Sunday",
@@ -37,6 +42,10 @@ function Calendar() {
       daysColumn: getDaysColumn(6),
     },
   ];
+
+  const getCurrentMonth = () => {
+    setCurrentMonth(new Date().getMonth());
+  };
 
   function getDaysColumn(dayNumber: any) {
     let d = new Date(),
@@ -81,6 +90,7 @@ function Calendar() {
                 key={i}
                 dayTitle={day.dayTitle}
                 daysColumn={day.daysColumn}
+                currentMonth={currentMonth}
               />
             ))}
           </tr>
