@@ -1,8 +1,34 @@
 import React from "react";
 
-function day(props: { date: any; currentMonth: any }) {
+import { useSelector, useDispatch } from "react-redux";
+
+import { setRemindersData } from "../../../store/actions/reminders";
+
+
+function Day(props: { date: any; currentMonth: any }) {
   const { date, currentMonth } = props;
-  console.log("p", props.date.getDay());
+
+  const dispatch = useDispatch();
+
+  //getting from Redux
+  const reminders = useSelector(
+    (state: any) =>
+      state.reminders[
+        date.getDate() + "-" + date.getMonth() + "-" + date.getFullYear()
+      ]
+    // state.reminders
+  );
+
+  //setting to redux
+  const setReminders = (reminders: Array<any>) =>
+    dispatch(setRemindersData(date, reminders));
+
+  const handleDayPress = () => {
+    console.log(reminders);
+    console.log(date.getHours() + ":" + date.getMinutes());
+    setReminders([{ time: "18:43", title: "reminder1", color: "blue" }]);
+  };
+
   return (
     <button
       style={{
@@ -14,11 +40,18 @@ function day(props: { date: any; currentMonth: any }) {
         borderStyle: "solid",
         borderColor: "red",
       }}
-      onClick={() => window.alert("k")}
+      onClick={() => handleDayPress()}
     >
-      {date.getDate() + "/" + date.getMonth()}
+      {/* <Modal
+        open={true}
+        // onClose={handleClose}
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+      ></Modal> */}
+      {date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear()}
+      {reminders && reminders.map ? reminders.map((e: any) => "s") : null}
     </button>
   );
 }
 
-export default day;
+export default Day;

@@ -16,8 +16,8 @@ function weekColumn(props: {
         }}
       >
         {dayTitle}
-        {daysColumn.map((date: any) => (
-          <Day date={date} currentMonth={currentMonth} />
+        {daysColumn.map((date: any, i: any) => (
+          <Day key={i} date={date} currentMonth={currentMonth} />
         ))}
       </td>
     </>
