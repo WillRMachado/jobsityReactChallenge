@@ -36,6 +36,7 @@ function ReminderItem(props: any) {
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
         date={date}
+        reminderId={id}
         editMode
       />
       <div style={{ backgroundColor: color }} onClick={(e) => handleEdit(e)}>

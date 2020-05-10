@@ -1,7 +1,7 @@
 /// <amd-dependency path="lib/errorInfoHandler">
 import React, { useState, useEffect } from "react";
 
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import { setNewReminderData } from "../store/actions/reminders";
 
@@ -13,29 +13,54 @@ import { SketchPicker } from "react-color";
 // import { TimePicker } from "@material-ui/pickers";
 import TimePicker from "react-time-picker";
 import Modal from "react-modal";
+import { find } from "lodash";
 
 function RemindersModal(props: any) {
-  const { isModalOpen, setIsModalOpen, date, editMode } = props;
-
-  //   console.log(editMode);
+  const { isModalOpen, setIsModalOpen, date, editMode, reminderId } = props;
 
   const dispatch = useDispatch();
 
-  const [color, setColor] = useState("#faf");
+  const reminderData = useSelector(
+    (state: any) =>
+      find(
+        state.reminders[
+          date.getDate() + "-" + date.getMonth() + "-" + date.getFullYear()
+        ],
+        ["id", reminderId]
+      )
+    //   state.reminders
+  );
+
+  const [color, setColor] = useState("#00f");
   const [city, setCity] = useState("");
   const [title, setTitle] = useState("");
   const [time, setTime] = useState("");
-  const [closeCount, setCloseCount] = useState([0]);
 
   useEffect(() => {
-    console.log("op", isModalOpen);
-    if (!isModalOpen) {
-      setCloseCount(closeCount);
+    if (editMode) {
+      populateEditMode(reminderId);
     }
-  }, [isModalOpen, closeCount]);
+    // eslint-disable-next-line
+  }, [editMode, reminderId, isModalOpen]);
 
   const setNewReminder = (reminders: any) =>
     dispatch(setNewReminderData(date, reminders));
+
+  const populateEditMode = (reminderId: any) => {
+    console.log("jj", editMode, "alm", reminderId, "ou", reminderData);
+    if (reminderData.color) {
+      setColor(reminderData.color);
+    }
+    if (reminderData.title) {
+      setTitle(reminderData.title);
+    }
+    if (reminderData.time) {
+      setTime(reminderData.time);
+    }
+    if (reminderData.city) {
+      setCity(reminderData.city);
+    }
+  };
 
   const handleGetGeoPosition = () => {
     navigator.geolocation.getCurrentPosition(
@@ -52,11 +77,19 @@ function RemindersModal(props: any) {
   };
 
   const handleReminderConfirmation = () => {
-    setNewReminder({ time, title, color });
-    setTime("");
-    setCity("");
-    setTitle("");
-    setIsModalOpen(false);
+    if (editMode) {
+      setNewReminder({ time, title, color, city });
+      setTime("");
+      setCity("");
+      setTitle("");
+      setIsModalOpen(false);
+    } else {
+      setNewReminder({ time, title, color, city });
+      setTime("");
+      setCity("");
+      setTitle("");
+      setIsModalOpen(false);
+    }
   };
 
   const handleClose = () => {
@@ -108,7 +141,7 @@ function RemindersModal(props: any) {
           color="primary"
           onClick={() => handleReminderConfirmation()}
         >
-          Primary
+          {editMode ? "Edit" : "Register"}
         </Button>
       </Modal>
     </>
