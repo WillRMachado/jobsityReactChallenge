@@ -1,16 +1,26 @@
 /* eslint-disable no-fallthrough */
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-// import moment from "moment";
-// import { Container, Col, Row } from "react-bootstrap";
+import { useWindowDimensions } from "../../utils/windowDimensions";
+
 import WeekColumn from "./fragments/weekColum";
 
 function Calendar() {
-  const [currentMonth, setCurrentMonth] = useState(0);
+  const [monthViewerModifier, setMonthViewerModifier] = useState(0);
+  const { height, width } = useWindowDimensions();
+  console.log(height)
 
-  useEffect(() => {
-    getCurrentMonth();
-  }, []);
+  const getCurrentMonthFirstDay = () => {
+    const now = new Date();
+
+    const currentVisibleMonth = new Date(
+      now.getFullYear(),
+      now.getMonth() + monthViewerModifier,
+      1
+    );
+    console.log(currentVisibleMonth);
+    return currentVisibleMonth;
+  };
 
   const calendar = [
     {
@@ -43,13 +53,8 @@ function Calendar() {
     },
   ];
 
-  const getCurrentMonth = () => {
-    setCurrentMonth(new Date().getMonth());
-  };
-
   function getDaysColumn(dayNumber: any) {
-    var now = new Date();
-    let d = new Date(now.getFullYear(), now.getMonth() + 1, 1),
+    let d = getCurrentMonthFirstDay(),
       month = d.getMonth(),
       weekDays = [];
 
@@ -63,7 +68,7 @@ function Calendar() {
 
     // adding previous Month Days
     if (d.getDate() > dayNumber + 1) {
-      let prevDay = new Date();
+      let prevDay = new Date(d.getTime());
       prevDay.setDate(d.getDate() - 7);
       weekDays.push(prevDay);
     }
@@ -76,12 +81,12 @@ function Calendar() {
 
     //adding next month dates
     if (weekDays.length <= 5) {
-      weekDays.push(d);
+      weekDays.push(new Date(d.getTime()));
     }
     if (weekDays.length <= 5) {
       d.setDate(d.getDate() + 7);
       console.log("d", d);
-      weekDays.push(d);
+      weekDays.push(new Date(d.getTime()));
     }
 
     return weekDays;
@@ -92,14 +97,51 @@ function Calendar() {
       <table>
         <tbody>
           <tr style={{ backgroundColor: "blue" }}>
+            <td>
+              <div
+                onClick={() => {
+                  setMonthViewerModifier(monthViewerModifier - 1);
+                }}
+              >
+                a
+              </div>
+            </td>
+
             {calendar.map((day, i) => (
               <WeekColumn
                 key={i}
                 dayTitle={day.dayTitle}
                 daysColumn={day.daysColumn}
-                currentMonth={currentMonth}
+                currentMonth={getCurrentMonthFirstDay().getMonth()}
               />
             ))}
+            <td>
+              <div
+                onClick={() => {
+                  setMonthViewerModifier(monthViewerModifier + 1);
+                }}
+              >
+                b
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div
+                onClick={() => {
+                  setMonthViewerModifier(monthViewerModifier - 1);
+                }}
+              >
+                a
+              </div>
+              <div
+                onClick={() => {
+                  setMonthViewerModifier(monthViewerModifier + 1);
+                }}
+              >
+                b
+              </div>
+            </td>
           </tr>
         </tbody>
       </table>
