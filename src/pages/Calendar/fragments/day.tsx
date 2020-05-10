@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 
 import ReminderModal from "../../../components/RemindersModal";
+import ReminderItem from "../../../components/ReminderItem";
 
 function Day(props: { date: any; currentMonth: any }) {
   const { date, currentMonth } = props;
@@ -43,7 +44,9 @@ function Day(props: { date: any; currentMonth: any }) {
         onClick={() => handleDayPress()}
       >
         {date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear()}
-        {reminders && reminders.map ? reminders.map((e: any) => "s") : null}
+        {reminders && reminders.map
+          ? reminders.map((e: any, i: any) => <ReminderItem date={date} data={e} key={i} />)
+          : null}
       </button>
     </>
   );
