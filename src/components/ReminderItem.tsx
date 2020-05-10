@@ -9,7 +9,7 @@ import { deleteReminderData } from "../store/actions/reminders";
 import ReminderModal from "./RemindersModal";
 
 function ReminderItem(props: any) {
-  const { time, title, color, id } = props.data;
+  const { time, title, color, id, icon } = props.data;
   const { date } = props;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,6 +42,7 @@ function ReminderItem(props: any) {
       <div style={{ backgroundColor: color }} onClick={(e) => handleEdit(e)}>
         <div>{time}</div>
         <div>{title}</div>
+        {icon ? <img alt="weather Icon" src={icon}></img> : null}
         <Edit />
         <Delete onClick={(e) => handleDelete(e)} />
       </div>

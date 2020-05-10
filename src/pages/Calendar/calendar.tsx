@@ -48,12 +48,14 @@ function Calendar() {
   };
 
   function getDaysColumn(dayNumber: any) {
-    let d = new Date(),
+    var now = new Date();
+    let d = new Date(now.getFullYear(), now.getMonth() + 1, 1),
       month = d.getMonth(),
       weekDays = [];
 
     d.setDate(1);
 
+    console.log("reader", month, d);
     // Get the first week day in the month
     while (d.getDay() !== dayNumber) {
       d.setDate(d.getDate() + 1);
@@ -74,6 +76,11 @@ function Calendar() {
 
     //adding next month dates
     if (weekDays.length <= 5) {
+      weekDays.push(d);
+    }
+    if (weekDays.length <= 5) {
+      d.setDate(d.getDate() + 7);
+      console.log("d", d);
       weekDays.push(d);
     }
 

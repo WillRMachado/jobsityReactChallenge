@@ -1,20 +1,18 @@
 /// <amd-dependency path="lib/errorInfoHandler">
 import React, { useState, useEffect } from "react";
-
+//Redux
 import { useSelector, useDispatch } from "react-redux";
-
 import {
   setNewReminderData,
   editReminderData,
 } from "../store/actions/reminders";
-
+//Services
 import { getReverseGeocode } from "../services/geolocation";
-
+import { getWeatherIconCity } from "../services/weather";
+//Utils & Components
 import { TextField, Button } from "@material-ui/core";
 import { GpsFixed } from "@material-ui/icons";
 import { SketchPicker } from "react-color";
-// import { TimePicker } from "@material-ui/pickers";
-import TimePicker from "react-time-picker";
 import Modal from "react-modal";
 import { find } from "lodash";
 
@@ -55,8 +53,6 @@ function RemindersModal(props: any) {
     dispatch(editReminderData(date, reminderId, newReminderData));
 
   const populateEditMode = (reminderId: any) => {
-    // console.log("jj", editMode, "alm", reminderId, "ou", reminderData);
-    // setReminderData(find(reminderArray, ["id", reminderId]));
     const editableData = find(reminderArray, ["id", reminderId]);
     if (editableData !== undefined) {
       if (editableData.color) {
@@ -74,52 +70,67 @@ function RemindersModal(props: any) {
     }
   };
 
+  const titleChecker = (text: string) => {
+    if (text.length <= 30) {
+      setTitle(text);
+    } else {
+      setTitle(text.slice(0, 30));
+      console.log("j");
+    }
+  };
+
   const handleGetGeoPosition = () => {
     navigator.geolocation.getCurrentPosition(
       function (position) {
         getReverseGeocode(
           position.coords.latitude,
           position.coords.longitude,
-          (newCity: any) => setCity(newCity.principalSubdivision)
+          (newCity: string) => setCity(newCity)
         );
       },
-      () => console.log("err"),
+      () => console.log("error getting geoLocation"),
       { maximumAge: 60000, timeout: 5000, enableHighAccuracy: true }
     );
   };
 
   const handleReminderConfirmation = () => {
-    if (editMode) {
-      editReminder(reminderId, { time, title, color, city });
-      setTime("");
-      setCity("");
-      setTitle("");
-      setIsModalOpen(false);
+    const setIconLink = (icon: any) => {
+      if (editMode) {
+        editReminder(reminderId, { time, title, color, city, icon });
+      } else {
+        setNewReminder({ time, title, color, city, icon });
+      }
+    };
+    //close and reset modal
+    setIsModalOpen(false);
+    setTime("");
+    setCity("");
+    setTitle("");
+
+    //api call will run w/ closed modal
+    if (date.getDate() === new Date().getDate()) {
+      getWeatherIconCity(
+        city,
+        (icon: any) => setIconLink(icon),
+        (err: any) => setIconLink(null)
+      );
     } else {
-      setNewReminder({ time, title, color, city });
-      setTime("");
-      setCity("");
-      setTitle("");
-      setIsModalOpen(false);
+      console.log(
+        "couldn't finda a free api for every day, currently, this calendar only supports weather for the current day"
+      );
+      setIconLink(null);
     }
   };
 
   const handleClose = () => {
-    console.log("clo", color, city, title, time);
     setIsModalOpen(false);
   };
 
   return (
     <>
       <Modal isOpen={isModalOpen} ariaHideApp={false} contentLabel="Reminder">
-        <div onClick={() => handleClose()}>aasssaa</div>
-        <TimePicker
-          onChange={(newTime: any) => setTime(newTime)}
-          value={time}
-          disableClock={true}
-        />
         <TextField
-          label="Title"
+          label="Set a Time"
           value={time}
           type={"time"}
           onChange={(value: any) => {
@@ -130,7 +141,7 @@ function RemindersModal(props: any) {
           label="Title"
           value={title}
           onChange={(value: any) => {
-            setTitle(value.target.value);
+            titleChecker(value.target.value);
           }}
         />
         <TextField
@@ -154,6 +165,13 @@ function RemindersModal(props: any) {
           onClick={() => handleReminderConfirmation()}
         >
           {editMode ? "Edit" : "Register"}
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => handleClose()}
+        >
+          Cancel
         </Button>
       </Modal>
     </>
