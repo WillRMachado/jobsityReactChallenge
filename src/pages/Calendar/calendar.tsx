@@ -1,14 +1,14 @@
 /* eslint-disable no-fallthrough */
 import React, { useState } from "react";
 
-import { useWindowDimensions } from "../../utils/windowDimensions";
+import { useWindowDimensions } from "../../utils/hooks/windowDimensions";
 
 import WeekColumn from "./fragments/weekColum";
+import { ForwardButton, BackwardButton } from "./fragments/calendarButtons";
 
 function Calendar() {
   const [monthViewerModifier, setMonthViewerModifier] = useState(0);
-  const { height, width } = useWindowDimensions();
-  console.log(height)
+  const { width } = useWindowDimensions();
 
   const getCurrentMonthFirstDay = () => {
     const now = new Date();
@@ -18,7 +18,6 @@ function Calendar() {
       now.getMonth() + monthViewerModifier,
       1
     );
-    console.log(currentVisibleMonth);
     return currentVisibleMonth;
   };
 
@@ -60,7 +59,6 @@ function Calendar() {
 
     d.setDate(1);
 
-    console.log("reader", month, d);
     // Get the first week day in the month
     while (d.getDay() !== dayNumber) {
       d.setDate(d.getDate() + 1);
@@ -85,7 +83,6 @@ function Calendar() {
     }
     if (weekDays.length <= 5) {
       d.setDate(d.getDate() + 7);
-      console.log("d", d);
       weekDays.push(new Date(d.getTime()));
     }
 
@@ -97,15 +94,15 @@ function Calendar() {
       <table>
         <tbody>
           <tr style={{ backgroundColor: "blue" }}>
-            <td>
-              <div
-                onClick={() => {
-                  setMonthViewerModifier(monthViewerModifier - 1);
-                }}
-              >
-                a
-              </div>
-            </td>
+            {width >= 1024 ? (
+              <td>
+                <BackwardButton
+                  onClick={() => {
+                    setMonthViewerModifier(monthViewerModifier - 1);
+                  }}
+                />
+              </td>
+            ) : null}
 
             {calendar.map((day, i) => (
               <WeekColumn
@@ -115,33 +112,31 @@ function Calendar() {
                 currentMonth={getCurrentMonthFirstDay().getMonth()}
               />
             ))}
-            <td>
-              <div
-                onClick={() => {
-                  setMonthViewerModifier(monthViewerModifier + 1);
-                }}
-              >
-                b
-              </div>
-            </td>
+            {width >= 1024 ? (
+              <td>
+                <ForwardButton
+                  onClick={() => {
+                    setMonthViewerModifier(monthViewerModifier + 1);
+                  }}
+                />
+              </td>
+            ) : null}
           </tr>
           <tr>
-            <td>
-              <div
-                onClick={() => {
-                  setMonthViewerModifier(monthViewerModifier - 1);
-                }}
-              >
-                a
-              </div>
-              <div
-                onClick={() => {
-                  setMonthViewerModifier(monthViewerModifier + 1);
-                }}
-              >
-                b
-              </div>
-            </td>
+            {width < 1024 ? (
+              <td>
+                <BackwardButton
+                  onClick={() => {
+                    setMonthViewerModifier(monthViewerModifier - 1);
+                  }}
+                />
+                <ForwardButton
+                  onClick={() => {
+                    setMonthViewerModifier(monthViewerModifier + 1);
+                  }}
+                />
+              </td>
+            ) : null}
           </tr>
         </tbody>
       </table>
