@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 
 import { setRemindersData } from "../../../store/actions/reminders";
 
+// import Modal from "@material-ui/core/Modal";
+
+import ReminderModal from "../../../components/RemindersModal";
 
 function Day(props: { date: any; currentMonth: any }) {
   const { date, currentMonth } = props;
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -27,30 +32,32 @@ function Day(props: { date: any; currentMonth: any }) {
     console.log(reminders);
     console.log(date.getHours() + ":" + date.getMinutes());
     setReminders([{ time: "18:43", title: "reminder1", color: "blue" }]);
+    setIsModalOpen(true);
   };
 
   return (
-    <button
-      style={{
-        width: "100%",
-        minHeight: "1000",
-        backgroundColor: date.getMonth() === currentMonth ? "green" : "black",
-        padding: 30,
-        borderWidth: 1,
-        borderStyle: "solid",
-        borderColor: "red",
-      }}
-      onClick={() => handleDayPress()}
-    >
-      {/* <Modal
-        open={true}
-        // onClose={handleClose}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-      ></Modal> */}
-      {date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear()}
-      {reminders && reminders.map ? reminders.map((e: any) => "s") : null}
-    </button>
+    <>
+      <ReminderModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+      />
+
+      <button
+        style={{
+          width: "100%",
+          minHeight: "1000",
+          backgroundColor: date.getMonth() === currentMonth ? "green" : "grey",
+          padding: 30,
+          borderWidth: 1,
+          borderStyle: "solid",
+          borderColor: "red",
+        }}
+        onClick={() => handleDayPress()}
+      >
+        {date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear()}
+        {reminders && reminders.map ? reminders.map((e: any) => "s") : null}
+      </button>
+    </>
   );
 }
 
