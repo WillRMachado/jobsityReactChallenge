@@ -1,5 +1,4 @@
-import { orderBy, remove } from "lodash";
-
+import { orderBy, remove,  findIndex } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
 const INITIAL_STATE = {};
@@ -35,6 +34,31 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         [identifier]: remindersArray,
+      };
+
+    case "EDIT_REMINDER":
+      identifier = getIdentifier(action.date);
+
+      console.log("edit called", action);
+      // state[identifier] !== undefined
+      //   ? (remindersArray = state[identifier].concat(reminderWithId))
+      //   : (remindersArray = [reminderWithId]);
+
+      const previousReminderIndex = findIndex(state[identifier], [
+        "id",
+        action.reminderId,
+      ]);
+      // console.log(previousReminderIndex);
+      remindersArray = state[identifier];
+      remindersArray[previousReminderIndex] = action.reminderData;
+
+      console.log(remindersArray);
+
+      remindersArray = orderBy(remindersArray, ["time"], ["asc"]);
+
+      return {
+        ...state,
+          [identifier]: remindersArray,
       };
 
     case "DELETE_REMINDER":

@@ -3,7 +3,10 @@ import React, { useState, useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import { setNewReminderData } from "../store/actions/reminders";
+import {
+  setNewReminderData,
+  editReminderData,
+} from "../store/actions/reminders";
 
 import { getReverseGeocode } from "../services/geolocation";
 
@@ -20,15 +23,17 @@ function RemindersModal(props: any) {
 
   const dispatch = useDispatch();
 
-  const reminderData = useSelector(
+  const reminderArray = useSelector(
     (state: any) =>
-      find(
-        state.reminders[
-          date.getDate() + "-" + date.getMonth() + "-" + date.getFullYear()
-        ],
-        ["id", reminderId]
-      )
-    //   state.reminders
+      //   find(
+      //     state.reminders[
+      //       date.getDate() + "-" + date.getMonth() + "-" + date.getFullYear()
+      //     ],
+      //     ["id", reminderId]
+      //   )
+      state.reminders[
+        date.getDate() + "-" + date.getMonth() + "-" + date.getFullYear()
+      ]
   );
 
   const [color, setColor] = useState("#00f");
@@ -46,19 +51,26 @@ function RemindersModal(props: any) {
   const setNewReminder = (reminders: any) =>
     dispatch(setNewReminderData(date, reminders));
 
+  const editReminder = (reminderId: any, newReminderData: any) =>
+    dispatch(editReminderData(date, reminderId, newReminderData));
+
   const populateEditMode = (reminderId: any) => {
-    console.log("jj", editMode, "alm", reminderId, "ou", reminderData);
-    if (reminderData.color) {
-      setColor(reminderData.color);
-    }
-    if (reminderData.title) {
-      setTitle(reminderData.title);
-    }
-    if (reminderData.time) {
-      setTime(reminderData.time);
-    }
-    if (reminderData.city) {
-      setCity(reminderData.city);
+    // console.log("jj", editMode, "alm", reminderId, "ou", reminderData);
+    // setReminderData(find(reminderArray, ["id", reminderId]));
+    const editableData = find(reminderArray, ["id", reminderId]);
+    if (editableData !== undefined) {
+      if (editableData.color) {
+        setColor(editableData.color);
+      }
+      if (editableData.title) {
+        setTitle(editableData.title);
+      }
+      if (editableData.time) {
+        setTime(editableData.time);
+      }
+      if (editableData.city) {
+        setCity(editableData.city);
+      }
     }
   };
 
@@ -78,7 +90,7 @@ function RemindersModal(props: any) {
 
   const handleReminderConfirmation = () => {
     if (editMode) {
-      setNewReminder({ time, title, color, city });
+      editReminder(reminderId, { time, title, color, city });
       setTime("");
       setCity("");
       setTitle("");

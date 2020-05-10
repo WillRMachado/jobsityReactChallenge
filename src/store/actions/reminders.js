@@ -14,6 +14,15 @@ export const setNewReminderData = (date, reminder) => {
   };
 };
 
+export const editReminderData = (date, reminderId, reminderData) => {
+  return {
+    type: "EDIT_REMINDER",
+    date,
+    reminderId,
+    reminderData,
+  };
+};
+
 export const deleteReminderData = (date, reminderId) => {
   return {
     type: "DELETE_REMINDER",

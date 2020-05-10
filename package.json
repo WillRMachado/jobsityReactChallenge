@@ -9,6 +9,7 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "@types/lodash": "^4.14.150",
     "@types/react-color": "^3.0.1",
     "@types/react-modal": "^3.10.5",
     "@types/react-redux": "^7.1.8",
