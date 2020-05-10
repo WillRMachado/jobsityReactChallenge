@@ -1,45 +1,93 @@
 /// <amd-dependency path="lib/errorInfoHandler">
 import React, { useState } from "react";
 
+import { useDispatch } from "react-redux";
+
+import {
+  //   setRemindersData,
+  setNewReminderData,
+} from "../store/actions/reminders";
+
+import { getReverseGeocode } from "../services/geolocation";
+
 import { TextField, Button } from "@material-ui/core";
+import { GpsFixed } from "@material-ui/icons";
+import { SketchPicker } from "react-color";
+// import { TimePicker } from "@material-ui/pickers";
+import TimePicker from "react-time-picker";
 import Modal from "react-modal";
-import { ChromePicker } from "react-color";
 
 function RemindersModal(props: any) {
-  const { isModalOpen, setIsModalOpen } = props;
+  const { isModalOpen, setIsModalOpen, date } = props;
 
-  const [color, setColor] = useState("#9aaaa0");
+  const dispatch = useDispatch();
 
-  const handleColorChange = (a: any) => {
-    console.log(a);
-    setColor(a);
-    // setColor(a);
+  const [color, setColor] = useState();
+  const [city, setCity] = useState("");
+  const [title, setTitle] = useState("");
+  const [time, setTime] = useState("");
+
+  //   const setReminders = (reminders: Array<any>) =>
+  //     dispatch(setRemindersData(date, reminders));
+
+  const setNewReminder = (reminders: any) =>
+    dispatch(setNewReminderData(date, reminders));
+
+  const handleGetGeoPosition = () => {
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        getReverseGeocode(
+          position.coords.latitude,
+          position.coords.longitude,
+          (newCity: any) => setCity(newCity.principalSubdivision)
+        );
+      },
+      () => console.log("err"),
+      { maximumAge: 60000, timeout: 5000, enableHighAccuracy: true }
+    );
   };
 
   const handleReminderConfirmation = () => {
-    console.log(color);
+    setNewReminder({ time, title, color });
   };
+
   return (
     <>
-      <Modal
-        isOpen={isModalOpen}
-        ariaHideApp={false}
-        contentLabel="Example Modal"
-      >
+      <Modal isOpen={isModalOpen} ariaHideApp={false} contentLabel="Reminder">
         <div onClick={() => setIsModalOpen(false)}>aasssaa</div>
-        <TextField label="Title" />
-        <TextField
-          //   id="filled-helperText"
-          label="Reminder Time"
-          type="time"
-          helperText="Set an hour for your reminder"
-          variant="filled"
+        <TimePicker
+          onChange={(newTime: any) => setTime(newTime)}
+          value={time}
+          disableClock={true}
         />
+        <TextField
+          label="Title"
+          value={time}
+          type={"time"}
+          onChange={(value: any) => {
+            setTime(value.target.value);
+          }}
+        />
+        <TextField
+          label="Title"
+          value={title}
+          onChange={(value: any) => {
+            setTitle(value.target.value);
+          }}
+        />
+        <TextField
+          label="City"
+          value={city}
+          onChange={(value: any) => {
+            setCity(value);
+          }}
+        />
+        <GpsFixed onClick={() => handleGetGeoPosition()} />
 
-        <ChromePicker
+        <SketchPicker
           color={color}
-          onChange={(newColor: any) => handleColorChange(newColor)}
-          onChangeComplete={(newColor: any) => handleColorChange(newColor)}
+          onChange={(newColor: any) => setColor(newColor)}
+          onChangeComplete={(newColor: any) => setColor(newColor.hex)}
         />
 
         <Button

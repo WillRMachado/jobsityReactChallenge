@@ -1,10 +1,6 @@
 import React, { useState } from "react";
 
-import { useSelector, useDispatch } from "react-redux";
-
-import { setRemindersData } from "../../../store/actions/reminders";
-
-// import Modal from "@material-ui/core/Modal";
+import { useSelector } from "react-redux";
 
 import ReminderModal from "../../../components/RemindersModal";
 
@@ -12,8 +8,6 @@ function Day(props: { date: any; currentMonth: any }) {
   const { date, currentMonth } = props;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const dispatch = useDispatch();
 
   //getting from Redux
   const reminders = useSelector(
@@ -24,14 +18,7 @@ function Day(props: { date: any; currentMonth: any }) {
     // state.reminders
   );
 
-  //setting to redux
-  const setReminders = (reminders: Array<any>) =>
-    dispatch(setRemindersData(date, reminders));
-
   const handleDayPress = () => {
-    console.log(reminders);
-    console.log(date.getHours() + ":" + date.getMinutes());
-    setReminders([{ time: "18:43", title: "reminder1", color: "blue" }]);
     setIsModalOpen(true);
   };
 
@@ -40,6 +27,7 @@ function Day(props: { date: any; currentMonth: any }) {
       <ReminderModal
         isModalOpen={isModalOpen}
         setIsModalOpen={setIsModalOpen}
+        date={date}
       />
 
       <button
