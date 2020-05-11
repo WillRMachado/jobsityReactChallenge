@@ -1,10 +1,11 @@
 /* eslint-disable no-fallthrough */
 import React, { useState } from "react";
+import "./Calendar.css";
 
 import { useWindowDimensions } from "../../utils/hooks/windowDimensions";
 
-import WeekColumn from "./fragments/weekColum";
-import { ForwardButton, BackwardButton } from "./fragments/calendarButtons";
+import WeekColumn from "./fragments/WeekColum";
+import { NavigateBefore, NavigateNext } from "@material-ui/icons";
 
 function Calendar() {
   const [monthViewerModifier, setMonthViewerModifier] = useState(0);
@@ -93,10 +94,11 @@ function Calendar() {
     <div>
       <table>
         <tbody>
-          <tr style={{ backgroundColor: "blue" }}>
+          <tr className={"calendarTableRow"}>
             {width >= 1024 ? (
               <td>
-                <BackwardButton
+                <NavigateBefore
+                  style={{ fontSize: 30 }}
                   onClick={() => {
                     setMonthViewerModifier(monthViewerModifier - 1);
                   }}
@@ -114,7 +116,8 @@ function Calendar() {
             ))}
             {width >= 1024 ? (
               <td>
-                <ForwardButton
+                <NavigateNext
+                  style={{ fontSize: 30 }}
                   onClick={() => {
                     setMonthViewerModifier(monthViewerModifier + 1);
                   }}
@@ -125,12 +128,14 @@ function Calendar() {
           <tr>
             {width < 1024 ? (
               <td>
-                <BackwardButton
+                <NavigateBefore
+                  style={{ fontSize: 30 }}
                   onClick={() => {
                     setMonthViewerModifier(monthViewerModifier - 1);
                   }}
                 />
-                <ForwardButton
+                <NavigateNext
+                  style={{ fontSize: 30 }}
                   onClick={() => {
                     setMonthViewerModifier(monthViewerModifier + 1);
                   }}

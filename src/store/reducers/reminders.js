@@ -1,4 +1,4 @@
-import { orderBy, remove,  findIndex } from "lodash";
+import { orderBy, remove, findIndex } from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
 const INITIAL_STATE = {};
@@ -12,15 +12,6 @@ export default (state = INITIAL_STATE, action) => {
   let remindersArray = [];
 
   switch (action.type) {
-    // case "SET_REMINDERS":
-    //   identifier =
-    //     action.date.getDate() +
-    //     "-" +
-    //     action.date.getMonth() +
-    //     "-" +
-    //     action.date.getFullYear();
-    //   return { ...state, [identifier]: action.reminders };
-
     case "SET_NEW_REMINDER":
       identifier = getIdentifier(action.date);
 
@@ -39,26 +30,18 @@ export default (state = INITIAL_STATE, action) => {
     case "EDIT_REMINDER":
       identifier = getIdentifier(action.date);
 
-      console.log("edit called", action);
-      // state[identifier] !== undefined
-      //   ? (remindersArray = state[identifier].concat(reminderWithId))
-      //   : (remindersArray = [reminderWithId]);
-
       const previousReminderIndex = findIndex(state[identifier], [
         "id",
         action.reminderId,
       ]);
-      // console.log(previousReminderIndex);
       remindersArray = state[identifier];
       remindersArray[previousReminderIndex] = action.reminderData;
-
-      console.log(remindersArray);
 
       remindersArray = orderBy(remindersArray, ["time"], ["asc"]);
 
       return {
         ...state,
-          [identifier]: remindersArray,
+        [identifier]: remindersArray,
       };
 
     case "DELETE_REMINDER":
@@ -66,6 +49,16 @@ export default (state = INITIAL_STATE, action) => {
 
       remindersArray = state[identifier];
       remove(remindersArray, { id: action.reminderId });
+
+      return {
+        ...state,
+        [identifier]: remindersArray.slice(),
+      };
+
+    case "DELETE_ALL_DAY_REMINDERS":
+      identifier = getIdentifier(action.date);
+
+      remindersArray = [];
 
       return {
         ...state,

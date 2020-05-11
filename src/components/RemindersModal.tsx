@@ -75,7 +75,6 @@ function RemindersModal(props: any) {
       setTitle(text);
     } else {
       setTitle(text.slice(0, 30));
-      console.log("j");
     }
   };
 
@@ -93,7 +92,7 @@ function RemindersModal(props: any) {
     );
   };
 
-  const handleReminderConfirmation = () => {
+  const handleReminderConfirmation = (e:any) => {
     const setIconLink = (icon: any) => {
       if (editMode) {
         editReminder(reminderId, { time, title, color, city, icon });
@@ -120,10 +119,12 @@ function RemindersModal(props: any) {
       );
       setIconLink(null);
     }
+    e.stopPropagation();
   };
 
-  const handleClose = () => {
+  const handleClose = (e:any) => {
     setIsModalOpen(false);
+    e.stopPropagation();
   };
 
   return (
@@ -162,14 +163,14 @@ function RemindersModal(props: any) {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => handleReminderConfirmation()}
+          onClick={(e:any) => handleReminderConfirmation(e)}
         >
           {editMode ? "Edit" : "Register"}
         </Button>
         <Button
           variant="contained"
           color="secondary"
-          onClick={() => handleClose()}
+          onClick={(e:any) => handleClose(e)}
         >
           Cancel
         </Button>

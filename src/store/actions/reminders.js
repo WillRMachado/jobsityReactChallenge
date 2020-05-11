@@ -1,11 +1,3 @@
-// export const setRemindersData = (date, reminders) => {
-//   return {
-//     type: "SET_REMINDERS",
-//     date,
-//     reminders,
-//   };
-// };
-
 export const setNewReminderData = (date, reminder) => {
   return {
     type: "SET_NEW_REMINDER",
@@ -28,6 +20,13 @@ export const deleteReminderData = (date, reminderId) => {
     type: "DELETE_REMINDER",
     date,
     reminderId,
+  };
+};
+
+export const deleteAllDayRemindersData = (date) => {
+  return {
+    type: "DELETE_ALL_DAY_REMINDERS",
+    date,
   };
 };
 

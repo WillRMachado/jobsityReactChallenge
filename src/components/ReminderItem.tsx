@@ -19,8 +19,6 @@ function ReminderItem(props: any) {
   const deleteReminder = (id: any) => dispatch(deleteReminderData(date, id));
 
   const handleEdit = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    console.log("edit");
-    console.log(id);
     setIsModalOpen(true);
     e.stopPropagation();
   };
