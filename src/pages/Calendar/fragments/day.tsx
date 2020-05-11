@@ -1,11 +1,17 @@
 import React, { useState } from "react";
 
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { deleteAllDayRemindersData } from "../../../store/actions/reminders";
+
+import { DeleteForever } from "@material-ui/icons";
 
 import ReminderModal from "../../../components/RemindersModal";
+import ReminderItem from "../../../components/ReminderItem";
 
 function Day(props: { date: any; currentMonth: any }) {
   const { date, currentMonth } = props;
+
+  const dispatch = useDispatch();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -15,11 +21,18 @@ function Day(props: { date: any; currentMonth: any }) {
       state.reminders[
         date.getDate() + "-" + date.getMonth() + "-" + date.getFullYear()
       ]
-    // state.reminders
   );
+
+  //dispatch to redux
+  const deleteAllDayReminders = () => dispatch(deleteAllDayRemindersData(date));
 
   const handleDayPress = () => {
     setIsModalOpen(true);
+  };
+
+  const handleDeleteAll = (e: any) => {
+    deleteAllDayReminders();
+    e.stopPropagation();
   };
 
   return (
@@ -31,19 +44,24 @@ function Day(props: { date: any; currentMonth: any }) {
       />
 
       <button
-        style={{
-          width: "100%",
-          minHeight: "1000",
-          backgroundColor: date.getMonth() === currentMonth ? "green" : "grey",
-          padding: 30,
-          borderWidth: 1,
-          borderStyle: "solid",
-          borderColor: "red",
-        }}
+        className={`weekDayBox ${
+          date.getMonth() === currentMonth ? "weekDayCurrentVisibleMonth" : ""
+        } ${
+          date.getMonth() === new Date().getMonth() ? "weekDayCurrentMonth" : ""
+        }`}
         onClick={() => handleDayPress()}
       >
-        {date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear()}
-        {reminders && reminders.map ? reminders.map((e: any) => "s") : null}
+        <div className={"dayTitle"}>
+          {date.getDate() + "/" + (date.getMonth() + 1)}
+        </div>
+        {reminders && reminders.map
+          ? reminders.map((e: any, i: any) => (
+              <ReminderItem date={date} data={e} key={i} />
+            ))
+          : null}
+        {reminders && reminders.length > 0 ? (
+          <DeleteForever onClick={(e: any) => handleDeleteAll(e)} />
+        ) : null}
       </button>
     </>
   );

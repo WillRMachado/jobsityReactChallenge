@@ -1,6 +1,6 @@
 import React from "react";
 
-import Day from "./day";
+import Day from "./Day";
 
 function weekColumn(props: {
   dayTitle: any;
@@ -10,12 +10,8 @@ function weekColumn(props: {
   const { dayTitle, daysColumn, currentMonth } = props;
   return (
     <>
-      <td
-        style={{
-          width: 1,
-        }}
-      >
-        {dayTitle}
+      <td>
+        <div className={"weekDayTitle"}>{dayTitle}</div>
         {daysColumn.map((date: any, i: any) => (
           <Day key={i} date={date} currentMonth={currentMonth} />
         ))}

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://api.bigdatacloud.net/data/";
+const baseURL = "http://api.openweathermap.org/data/";
 
 const timeout = 20000;
 
@@ -13,13 +13,12 @@ const axiosInstance = axios.create({
   headers,
 });
 
-export const getReverseGeocode = (
-  latitude: any,
-  longitude: any,
+export const getWeatherIconCity = (
+  cityName: any,
   callbackSuccess?: Function,
   callbackError?: Function
 ) => {
-  const action = `reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=pt`;
+  const action = `2.5/weather?APPID=41199325ac019fe469c0ed52b3e63b2c&q=${cityName}`;
 
   const method = "get";
 
@@ -32,10 +31,11 @@ export const getReverseGeocode = (
     })
     .then((response) => {
       console.log("status", response.status, response.data);
-      if (callbackSuccess && response.data.principalSubdivision) {
-        return callbackSuccess(response.data.principalSubdivision);
+      if (callbackSuccess && response.data.weather[0].icon !== undefined) {
+        const iconLink = `http://openweathermap.org/img/wn/${response.data.weather[0].icon}.png`;
+        return callbackSuccess(iconLink);
       } else {
-        return response.data;
+        return response.data.weather[0].icon;
       }
     })
     .catch((error) => {

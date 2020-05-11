@@ -1,0 +1,41 @@
+.calendarTableRow {
+  font-size: 100%;
+}
+
+.weekDayTitle {
+  font-size: 100%;
+  background-color: blueviolet;
+}
+
+.weekDayBox {
+  /* display: flex; */
+  width: 100%;
+  min-height: 70px;
+  padding-left: 60px;
+  padding-bottom: 60px;
+  padding-right: 0px;
+  padding-top: 0px;
+  border-width: 1;
+  border-style: "solid";
+  border-color: "red";
+  /* // backgroundColor: date.getMonth() === currentMonth ? "green" : "grey", */
+}
+
+.weekDayCurrentMonth {
+  /* background-color: blue; */
+  border-color: brown;
+  border-style: solid;
+  border-width: 2px;
+}
+
+.weekDayCurrentVisibleMonth {
+  background-color: blue;
+  display: flex;
+  /* align-items: center; */
+}
+
+.dayTitle {
+  background-color: chocolate;
+  display: flex;
+  align-self: flex-start;
+}
