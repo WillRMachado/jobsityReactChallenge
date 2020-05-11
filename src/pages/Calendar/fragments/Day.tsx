@@ -60,11 +60,15 @@ function Day(props: { date: any; currentMonth: any }) {
             ))
           : null}
         {reminders && reminders.length > 0 ? (
-          <DeleteForever onClick={(e: any) => handleDeleteAll(e)} />
+          <DeleteForever
+            style={{ position: "absolute" }}
+            onClick={(e: any) => handleDeleteAll(e)}
+          />
         ) : null}
       </button>
     </>
   );
 }
+
 
 export default Day;

@@ -37,7 +37,11 @@ function ReminderItem(props: any) {
         reminderId={id}
         editMode
       />
-      <div style={{ backgroundColor: color }} onClick={(e) => handleEdit(e)}>
+      <div
+        style={{ backgroundColor: color }}
+        className={"reminderContainer"}
+        onClick={(e) => handleEdit(e)}
+      >
         <div>{time}</div>
         <div>{title}</div>
         {icon ? <img alt="weather Icon" src={icon}></img> : null}
