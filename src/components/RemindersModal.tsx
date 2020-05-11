@@ -92,7 +92,7 @@ function RemindersModal(props: any) {
     );
   };
 
-  const handleReminderConfirmation = (e:any) => {
+  const handleReminderConfirmation = (e: any) => {
     const setIconLink = (icon: any) => {
       if (editMode) {
         editReminder(reminderId, { time, title, color, city, icon });
@@ -122,7 +122,7 @@ function RemindersModal(props: any) {
     e.stopPropagation();
   };
 
-  const handleClose = (e:any) => {
+  const handleClose = (e: any) => {
     setIsModalOpen(false);
     e.stopPropagation();
   };
@@ -130,50 +130,55 @@ function RemindersModal(props: any) {
   return (
     <>
       <Modal isOpen={isModalOpen} ariaHideApp={false} contentLabel="Reminder">
-        <TextField
-          label="Set a Time"
-          value={time}
-          type={"time"}
-          onChange={(value: any) => {
-            setTime(value.target.value);
-          }}
-        />
-        <TextField
-          label="Title"
-          value={title}
-          onChange={(value: any) => {
-            titleChecker(value.target.value);
-          }}
-        />
-        <TextField
-          label="City"
-          value={city}
-          onChange={(value: any) => {
-            setCity(value.target.value);
-          }}
-        />
-        <GpsFixed onClick={() => handleGetGeoPosition()} />
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <TextField
+            label="Set a Time"
+            value={time}
+            style={{ width: 100 }}
+            type={"time"}
+            onChange={(value: any) => {
+              setTime(value.target.value);
+            }}
+          />
+          <TextField
+            label="Title"
+            value={title}
+            onChange={(value: any) => {
+              titleChecker(value.target.value);
+            }}
+          />
+          <div>
+            <TextField
+              label="City"
+              value={city}
+              onChange={(value: any) => {
+                setCity(value.target.value);
+              }}
+            />
+            <GpsFixed onClick={() => handleGetGeoPosition()} />
+          </div>
 
-        <SketchPicker
-          color={color}
-          onChange={(newColor: any) => setColor(newColor)}
-          onChangeComplete={(newColor: any) => setColor(newColor.hex)}
-        />
+          <SketchPicker
+            color={color}
+            onChange={(newColor: any) => setColor(newColor)}
+            onChangeComplete={(newColor: any) => setColor(newColor.hex)}
+          />
 
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={(e:any) => handleReminderConfirmation(e)}
-        >
-          {editMode ? "Edit" : "Register"}
-        </Button>
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={(e:any) => handleClose(e)}
-        >
-          Cancel
-        </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={(e: any) => handleReminderConfirmation(e)}
+          >
+            {editMode ? "Edit" : "Register"}
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={(e: any) => handleClose(e)}
+          >
+            Cancel
+          </Button>
+        </div>
       </Modal>
     </>
   );
